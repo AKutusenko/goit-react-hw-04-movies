@@ -1,0 +1,21 @@
+.nav {
+  max-height: 230px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  border-bottom: 1px solid white;
+}
+.link {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 1.667;
+  color: white;
+}
+
+.activeLink,
+.link:hover,
+.link:focus {
+  color: #3f81e4;
+  outline: none;
+}
