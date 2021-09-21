@@ -1,30 +1,60 @@
 import "./App.css";
 import { Switch, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import Navigation from "./components/Navigation/Navigation";
 import Container from "./components/Container/Container";
-import HomePage from "./components/pages/HomePage/HomePage";
-import MovieDetailsPage from "./components/pages/MovieDetailsPage/MovieDetailsPage";
-import Movies from "./components/pages/Movies/Movies";
-import NotFoundPage from "./components/pages/NotFoundPage/NotFoundPage";
+import Loader from "react-loader-spinner";
+
+const HomePage = lazy(() =>
+  import(
+    "./components/pages/HomePage/HomePage" /* webpackChunkName: "HomePage"*/
+  )
+);
+const MovieDetailsPage = lazy(() =>
+  import(
+    "./components/pages/MovieDetailsPage/MovieDetailsPage" /* webpackChunkName: "MovieDetailsPage"*/
+  )
+);
+const Movies = lazy(() =>
+  import("./components/pages/Movies/Movies" /* webpackChunkName: "Movies"*/)
+);
+const NotFoundPage = lazy(() =>
+  import(
+    "./components/pages/NotFoundPage/NotFoundPage" /* webpackChunkName: "NotFoundPage"*/
+  )
+);
 
 export default function App() {
   return (
     <Container>
       <Navigation />
-      <Switch>
-        <Route path="/" exact>
-          <HomePage />
-        </Route>
-        <Route path="/movies" exact>
-          <Movies />
-        </Route>
-        <Route path="/movies/:movieId">
-          <MovieDetailsPage />
-        </Route>
-        <Route>
-          <NotFoundPage />
-        </Route>
-      </Switch>
+      <Suspense
+        fallback={
+          <Loader
+            style={{ textAlign: "center", marginTop: "15px" }}
+            type="Music"
+            color="#3f81e4"
+            height={100}
+            width={100}
+            timeout={3000} //3 secs
+          />
+        }
+      >
+        <Switch>
+          <Route path="/" exact>
+            <HomePage />
+          </Route>
+          <Route path="/movies" exact>
+            <Movies />
+          </Route>
+          <Route path="/movies/:movieId">
+            <MovieDetailsPage />
+          </Route>
+          <Route>
+            <NotFoundPage />
+          </Route>
+        </Switch>
+      </Suspense>
     </Container>
   );
 }
