@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { NavLink, useRouteMatch } from "react-router-dom";
+import { NavLink, useRouteMatch, useLocation } from "react-router-dom";
 
 import { Route } from "react-router-dom";
 
@@ -11,11 +11,14 @@ import Reviews from "../../../components/Reviews/Reviews";
 import GoBackBtn from "../../GoBackBtn/GoBackBtn";
 
 export default function MovieDetailsPage() {
-  const { movieId } = useParams();
+  const { slug } = useParams();
+  const movieId = slug.match(/[a-z0-9]+$/)[0];
   const [movie, setMovie] = useState("");
   const { original_title, poster_path, vote_average, genres, overview } = movie;
   const IMG_PATH = "https://image.tmdb.org/t/p/original";
   const { url, path } = useRouteMatch();
+  const location = useLocation();
+
   useEffect(() => {
     getMovieDetails(movieId).then((results) => setMovie(results));
   }, [movieId]);
@@ -43,7 +46,10 @@ export default function MovieDetailsPage() {
       <NavLink
         className={s.link}
         activeClassName={s.activeLink}
-        to={`${url}/cast`}
+        to={{
+          pathname: `${url}/cast`,
+          state: { from: location },
+        }}
       >
         Cast
       </NavLink>
@@ -51,7 +57,10 @@ export default function MovieDetailsPage() {
         className={s.link}
         activeClassName={s.activeLink}
         exact
-        to={`${url}/reviews`}
+        to={{
+          pathname: `${url}/reviews`,
+          state: { from: location },
+        }}
       >
         Reviews
       </NavLink>

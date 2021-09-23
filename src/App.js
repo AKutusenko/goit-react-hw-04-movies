@@ -32,7 +32,7 @@ export default function App() {
         fallback={
           <Loader
             style={{ textAlign: "center", marginTop: "15px" }}
-            type="Music"
+            type="Audio"
             color="#3f81e4"
             height={100}
             width={100}
@@ -47,7 +47,7 @@ export default function App() {
           <Route path="/movies" exact>
             <Movies />
           </Route>
-          <Route path="/movies/:movieId">
+          <Route path="/movies/:slug">
             <MovieDetailsPage />
           </Route>
           <Route>

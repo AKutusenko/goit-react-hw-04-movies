@@ -9,8 +9,8 @@ const IMG_PATH = "https://image.tmdb.org/t/p/original";
 
 export default function Cast() {
   const [cast, setCast] = useState([]);
-
-  const { movieId } = useParams();
+  const { slug } = useParams();
+  const movieId = slug.match(/[a-z0-9]+$/)[0];
 
   useEffect(() => {
     getCastMovieInfo(movieId)

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch, useLocation } from "react-router-dom";
 import { getTrending } from "../../../services/MoviesApi";
 import s from "./HomePage.module.css";
 import GoBackBtn from "../../GoBackBtn/GoBackBtn";
@@ -7,6 +7,7 @@ import GoBackBtn from "../../GoBackBtn/GoBackBtn";
 export default function HomePage() {
   const [movies, setMovies] = useState(null);
   const { url } = useRouteMatch();
+  const location = useLocation();
 
   useEffect(() => {
     getTrending().then(({ results }) => setMovies(results));
@@ -19,7 +20,14 @@ export default function HomePage() {
       {movies &&
         movies.map(({ id, title }) => (
           <li className={s.item} key={id}>
-            <Link to={`${url}movies/${id}`}>{title}</Link>
+            <Link
+              to={{
+                pathname: `${url}movies/${id}`,
+                state: { from: location },
+              }}
+            >
+              {title}
+            </Link>
           </li>
         ))}
     </div>

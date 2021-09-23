@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useRouteMatch, useLocation, useHistory } from "react-router-dom";
 import s from "./Movies.module.css";
 import { getMovieByQuery } from "../../../services/MoviesApi";
 import GoBackBtn from "../../GoBackBtn/GoBackBtn";
@@ -7,8 +7,17 @@ import GoBackBtn from "../../GoBackBtn/GoBackBtn";
 export default function Movies() {
   const [searchQuery, setSearchQuery] = useState("");
   const [movies, setMovies] = useState([]);
-
+  const location = useLocation();
+  const history = useHistory();
   const { url } = useRouteMatch();
+  const query = new URLSearchParams(location.search).get("query");
+  var slugify = require("slugify");
+
+  useEffect(() => {
+    if (!query) return;
+
+    getMovieByQuery(query).then(({ results }) => setMovies(results));
+  }, [query]);
 
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
@@ -16,8 +25,12 @@ export default function Movies() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    searchQuery.length > 0 &&
+    searchQuery.trim().length > 0 &&
       getMovieByQuery(searchQuery).then(({ results }) => setMovies(results));
+    history.push({
+      ...location,
+      search: `query=${searchQuery}`,
+    });
     setSearchQuery("");
   };
 
@@ -45,7 +58,16 @@ export default function Movies() {
         <ul>
           {movies.map(({ original_title, id }) => (
             <li className={s.listItem} key={id}>
-              <Link to={`${url}/${id}`}>{original_title}</Link>
+              <Link
+                to={{
+                  pathname: `${url}/${slugify(`${original_title} ${id}`, {
+                    lower: true,
+                  })}`,
+                  state: { from: location },
+                }}
+              >
+                {original_title}
+              </Link>
             </li>
           ))}
         </ul>

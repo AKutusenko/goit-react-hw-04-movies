@@ -7,7 +7,8 @@ import s from "./Reviews.module.css";
 
 export default function ReviewsView() {
   const [reviews, setReviews] = useState([]);
-  const { movieId } = useParams();
+  const { slug } = useParams();
+  const movieId = slug.match(/[a-z0-9]+$/)[0];
 
   useEffect(() => {
     getMovieReview(movieId)
