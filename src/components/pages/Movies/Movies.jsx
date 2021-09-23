@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link, useRouteMatch, useLocation, useHistory } from "react-router-dom";
 import s from "./Movies.module.css";
 import { getMovieByQuery } from "../../../services/MoviesApi";
-import GoBackBtn from "../../GoBackBtn/GoBackBtn";
 
 export default function Movies() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -53,7 +52,6 @@ export default function Movies() {
           />
         </form>
       </header>
-      <GoBackBtn />
       {movies && (
         <ul>
           {movies.map(({ original_title, id }) => (

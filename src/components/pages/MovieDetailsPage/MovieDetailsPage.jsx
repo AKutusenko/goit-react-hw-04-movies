@@ -48,7 +48,7 @@ export default function MovieDetailsPage() {
         activeClassName={s.activeLink}
         to={{
           pathname: `${url}/cast`,
-          state: { from: location },
+          state: { from: location.state.from },
         }}
       >
         Cast
@@ -59,7 +59,7 @@ export default function MovieDetailsPage() {
         exact
         to={{
           pathname: `${url}/reviews`,
-          state: { from: location },
+          state: { from: location.state.from },
         }}
       >
         Reviews
